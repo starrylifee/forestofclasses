@@ -117,14 +117,18 @@ if st.button("검색하기"):
             # 네이버 백과사전 검색
             item = search_naver_encyclopedia(query)
             if item:
-                st.header("검색 결과")
-                st.write(f"[네이버 페이지로 이동하려면 클릭하세요]({item['link']})")
-                
                 # 번역된 결과 표시
                 original_text = remove_html_tags(item['description'])
                 translated_text = translate_text(original_text, grade_level)
-                st.write("#### 번역된 내용")
-                st.write(translated_text)
+                
+                # '초등학생에게 유해한 내용입니다' 포함 여부 확인
+                if "초등학생에게 유해한 내용입니다" in translated_text:
+                    st.warning("해당 내용은 초등학생에게 유해할 수 있어 링크를 제공하지 않습니다.")
+                else:
+                    st.header("검색 결과")
+                    st.write(f"[네이버 페이지로 이동하려면 클릭하세요]({item['link']})")
+                    st.write("#### 번역된 내용")
+                    st.write(translated_text)
             else:
                 st.warning("검색 결과가 없습니다.")
     else:
