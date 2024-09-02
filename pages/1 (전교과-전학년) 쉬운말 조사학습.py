@@ -95,7 +95,7 @@ def remove_html_tags(text):
 
 # OpenAI GPT 호출 함수 (학년에 맞춘 번역)
 def translate_text(text, grade_level):
-    prompt = f"다음 글을 {grade_level} 학년이 이해하기 쉽게 번역해 주세요. 가능한 자세히 번역해 주세요.:\n\n{text}"
+    prompt = f"다음 글을 {grade_level} 학년이 이해하기 쉽게 번역해 주세요. 가능한 자세히 번역해 주세요. 만약 초등학생에게 유해한 내용이라면 '초등학생에게 유해한 내용입니다'를 출력해주세요.:\n\n{text}"
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",  # 사용 가능한 모델로 변경
