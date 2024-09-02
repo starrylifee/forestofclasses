@@ -4,15 +4,13 @@ import toml
 import pathlib
 import urllib.parse
 from bs4 import BeautifulSoup
-from openai import OpenAI
+import openai  # openai 모듈을 임포트합니다.
 
 # 웹페이지 제목 설정
 st.set_page_config(
     page_title="함께학교 프로젝트",
     page_icon="🏫"
 )
-
-client = OpenAI()
 
 # GitHub 아이콘 숨기기
 hide_github_icon = """
@@ -45,13 +43,14 @@ except Exception as e:
     st.error(f"secrets.toml 파일을 읽는 중 오류가 발생했습니다: {e}")
     st.stop()
 
-# OpenAI API 키 설정 및 클라이언트 초기화
+# OpenAI API 키 설정
 api_key = secrets.get("openai_api_key")
 if not api_key:
     st.error("OpenAI API 키가 설정되지 않았습니다.")
     st.stop()
 
-client = OpenAI(api_key=api_key)
+# OpenAI API 키 설정
+openai.api_key = api_key  # API 키를 설정합니다.
 
 # 비밀번호 입력 전 이미지를 보여줌
 password = st.text_input("**비밀번호를 입력하세요**:", type="password")
@@ -98,13 +97,13 @@ def remove_html_tags(text):
 def translate_text(text, grade_level):
     prompt = f"다음 글을 {grade_level} 학년이 이해하기 쉽게 번역해 주세요. 가능한 자세히 번역해 주세요.:\n\n{text}"
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
+        response = openai.ChatCompletion.create(  # openai 모듈의 함수를 사용합니다.
+            model="gpt-4",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=3000,  # 더 긴 텍스트를 허용
             temperature=0.7
         )
-        return response.choices[0].message.content.strip()
+        return response['choices'][0]['message']['content'].strip()
     except Exception as e:
         print(f"API 호출 실패: {e}")
         return "번역 생성에 실패했습니다."
