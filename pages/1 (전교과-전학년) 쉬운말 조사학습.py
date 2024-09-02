@@ -95,7 +95,7 @@ def remove_html_tags(text):
 
 # OpenAI GPT 호출 함수 (학년에 맞춘 번역)
 def translate_text(text, grade_level):
-    prompt = f"다음 글을 {grade_level} 학년이 이해하기 쉽게 번역해 주세요. 가능한 자세히 번역해 주세요. 만약 초등학생에게 유해한 내용이라면 '초등학생에게 유해한 내용입니다'를 출력해주세요.:\n\n{text}"
+    prompt = f"다음 글을 {grade_level} 학년이 이해하기 쉽게 번역해 주세요. 가능한 자세히 번역해 주세요.:\n\n{text}"
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",  # 사용 가능한 모델로 변경
@@ -117,18 +117,14 @@ if st.button("검색하기"):
             # 네이버 백과사전 검색
             item = search_naver_encyclopedia(query)
             if item:
+                st.header("검색 결과")
+                st.write(f"[네이버 페이지로 이동하려면 클릭하세요]({item['link']})")
+                
                 # 번역된 결과 표시
                 original_text = remove_html_tags(item['description'])
                 translated_text = translate_text(original_text, grade_level)
-                
-                # '초등학생에게 유해한 내용입니다' 포함 여부 확인
-                if "초등학생에게 유해한 내용입니다" in translated_text:
-                    st.warning("해당 내용은 초등학생에게 유해할 수 있어 링크를 제공하지 않습니다.")
-                else:
-                    st.header("검색 결과")
-                    st.write(f"[네이버 페이지로 이동하려면 클릭하세요]({item['link']})")
-                    st.write("#### 번역된 내용")
-                    st.write(translated_text)
+                st.write("#### 번역된 내용")
+                st.write(translated_text)
             else:
                 st.warning("검색 결과가 없습니다.")
     else:
