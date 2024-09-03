@@ -52,15 +52,7 @@ if not api_key:
 # OpenAI 클라이언트 설정
 client = OpenAI(api_key=api_key)
 
-# 비밀번호 입력 전 이미지를 보여줌
-password = st.text_input("**비밀번호를 입력하세요**:", type="password")
-
-# 비밀번호가 올바르지 않은 경우 이미지 표시
-if password != secrets.get("page_password_1"):
-    st.image("files/a2.png")  # 이미지 경로는 루트 디렉토리의 files 폴더
-    st.stop()
-
-# 비밀번호가 올바른 경우, 원래의 내용 출력
+# 원래의 내용 출력
 st.title("📖 쉬운말 조사 학습 📖")
 
 # 조사할 주제와 학년 입력 받기
